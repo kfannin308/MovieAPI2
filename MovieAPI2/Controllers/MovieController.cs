@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieAPI2.Models;
+using System.Collections.Generic;
 
 namespace MovieAPI2.Controllers
 {
@@ -59,9 +60,46 @@ namespace MovieAPI2.Controllers
                 }         
             }
             return randomMovie;
-      
-
         }
+        [Route("GetRandomMoviePicks")]
+        public Movie[] GetRandomMoviePicks(int pickNum)
+        {
+            int movieCount = 0;
+            Random rdn = new Random();
+            int rInt;
+            List<Movie> pickList = new List<Movie>();
+            bool inList;
+            if (pickNum > 0)
+            {
+                do
+                {
+                    rInt = rdn.Next(0, DB.Movies.Count);
+                    inList = pickList.Contains(DB.Movies[rInt]);
+                    if (!inList)
+                    {
+                        pickList.Add(DB.Movies[rInt]);
+                        movieCount++;
+                    }
+                    
+                    
 
+                    /*
+                     * rInt = rdn.Next(1, DB.Movies.Count + 1);
+                    for (int i = 0; i < DB.Movies.Count; i++)   
+                        {
+
+                            if (i == rInt)
+                            {
+                                pickList.Add(DB.Movies[i]);
+                                movieCount++;
+                                if (movieCount == pickNum) { break; }
+                            }
+                        }  
+                    } */
+                }
+                while (movieCount < pickNum);
+            }
+            return pickList.ToArray();
+        }
     }
 }
