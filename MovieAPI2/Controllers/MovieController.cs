@@ -81,21 +81,6 @@ namespace MovieAPI2.Controllers
                         movieCount++;
                     }
                     
-                    
-
-                    /*
-                     * rInt = rdn.Next(1, DB.Movies.Count + 1);
-                    for (int i = 0; i < DB.Movies.Count; i++)   
-                        {
-
-                            if (i == rInt)
-                            {
-                                pickList.Add(DB.Movies[i]);
-                                movieCount++;
-                                if (movieCount == pickNum) { break; }
-                            }
-                        }  
-                    } */
                 }
                 while (movieCount < pickNum);
             }
