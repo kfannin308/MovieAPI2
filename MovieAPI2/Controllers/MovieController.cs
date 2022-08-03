@@ -15,13 +15,14 @@ namespace MovieAPI2.Controllers
         {
             return DB.Movies.ToArray();
         }
+
         [Route ("GetMoviesByCategory")]
         public Movie[] GetMoviesByCategory(string category)
         {
             return DB.Movies.Where (x => x.Category == category).ToArray();
         }
+
         [Route ("GetRandomMovie")]
-        
         public Movie GetRandomMovie()
         {
             Random r = new Random();
@@ -39,6 +40,7 @@ namespace MovieAPI2.Controllers
             return null;
 
         }
+        
         [Route ("GetRandomMovieInCategory")]
         public Movie GetRandomMovieInCategory(string category)
         {
@@ -61,6 +63,7 @@ namespace MovieAPI2.Controllers
             }
             return randomMovie;
         }
+        
         [Route("GetRandomMoviePicks")]
         public Movie[] GetRandomMoviePicks(int pickNum)
         {
@@ -69,6 +72,10 @@ namespace MovieAPI2.Controllers
             int rInt;
             List<Movie> pickList = new List<Movie>();
             bool inList;
+            if(pickNum > DB.Movies.Count)
+            {
+                pickNum = DB.Movies.Count;
+            }
             if (pickNum > 0)
             {
                 do
@@ -85,6 +92,54 @@ namespace MovieAPI2.Controllers
                 while (movieCount < pickNum);
             }
             return pickList.ToArray();
+        }
+        [Route("GetAllCategories")]
+        public List<string> GetAllCategories()
+        {
+            List<string> myCategories = new List<string>();
+            bool inList;
+
+            //for(int i = 0; i < DB.Movies.Count; i++)
+            foreach(Movie currMovie in DB.Movies)
+            {
+                inList = myCategories.Contains(currMovie.Category);
+                if (!inList)
+                {
+                    myCategories.Add(currMovie.Category);
+                }
+
+            }
+            return myCategories;
+
+        }
+        
+        [Route("GetMovieDetailsByTitle")]
+        public Movie GetMovieDetailsbyTitle(string title)
+        {
+            foreach (Movie currMovie in DB.Movies)
+            {
+                if (currMovie.Title == title)
+                {
+                    return currMovie;
+                    break;
+                }
+            }
+            return null;
+
+        }
+        [Route("GetMovieByKeyWord")]
+        public Movie[] GetMovieByKeyWord(string keyword)
+        {
+            List<Movie> myList = new List<Movie>();
+            foreach (Movie currMovie in DB.Movies)
+            {
+                if (currMovie.Title.Contains(keyword))
+                {
+                    myList.Add(currMovie);
+                }
+            }
+            return myList.ToArray();
+
         }
     }
 }
